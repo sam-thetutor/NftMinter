@@ -9,7 +9,7 @@ const NftMinter = () => {
     <div className="flex flex-col items-center h-screen">
       {user && <Mint />}
       {user && <DisplayNfts />}
-      {}
+      
     </div>
   );
 };
