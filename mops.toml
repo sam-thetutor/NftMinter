@@ -1,0 +1,5 @@
+[dependencies]
+encoding = "https://github.com/aviate-labs/encoding.mo#master@2711d18727e954b11afc0d37945608512b5fbce2"
+cap = "https://github.com/Psychedelic/cap-motoko-library#master@c11ad01a143833a00a927cc55d9131eb5ffcaa21"
+base = "0.11.3"
+fuzz = "0.2.1"

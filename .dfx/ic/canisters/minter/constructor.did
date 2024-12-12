@@ -1,0 +1,354 @@
+type AccountIdentifier = text;
+type AccountIdentifier__1 = text;
+type AssetHandle = text;
+type AssetId = nat32;
+type AssetType = variant {
+  other : text;
+  canister : record { id : AssetId; canister : text };
+  direct : vec ChunkId;
+};
+type Balance = nat;
+type BalanceRequest = record { token : TokenIdentifier; user : User };
+type BalanceResponse = variant { ok : Balance; err : CommonError__1 };
+type Balance__1 = nat;
+type ChunkId = nat32;
+type CommonError = variant { InvalidToken : TokenIdentifier; Other : text };
+type CommonError__1 = variant { InvalidToken : TokenIdentifier; Other : text };
+type EXTNFT = service {
+  acceptCycles : () -> ();
+  addAsset : (AssetHandle, nat32, text, text, text) -> ();
+  addThumbnail : (AssetHandle, blob) -> ();
+  adminKillHeartbeat : () -> ();
+  adminStartHeartbeat : () -> ();
+  allSettlements : () -> (
+      vec record {
+        TokenIndex;
+        record {
+          subaccount : SubAccount__1;
+          seller : principal;
+          buyer : AccountIdentifier__1;
+          price : nat64;
+        };
+      },
+    ) query;
+  availableCycles : () -> (nat) query;
+  balance : (BalanceRequest) -> (BalanceResponse) query;
+  bearer : (TokenIdentifier__1) -> (Result_7) query;
+  details : (TokenIdentifier__1) -> (Result_10) query;
+  ext_addAssetCanister : () -> ();
+  ext_admin : () -> (principal) query;
+  ext_assetAdd : (AssetHandle, text, text, AssetType, nat) -> ();
+  ext_assetExists : (AssetHandle) -> (bool) query;
+  ext_assetFits : (bool, nat) -> (bool) query;
+  ext_assetStream : (AssetHandle, blob, bool) -> (bool);
+  ext_balance : (BalanceRequest) -> (BalanceResponse) query;
+  ext_bearer : (TokenIdentifier__1) -> (Result_7) query;
+  ext_capInit : () -> ();
+  ext_expired : () -> (
+      vec record { AccountIdentifier__1; SubAccount__1 },
+    ) query;
+  ext_extensions : () -> (vec Extension) query;
+  ext_marketplaceList : (ListRequest) -> (Result_3);
+  ext_marketplaceListings : () -> (
+      vec record { TokenIndex; Listing; Metadata },
+    ) query;
+  ext_marketplacePurchase : (
+      TokenIdentifier__1,
+      nat64,
+      AccountIdentifier__1,
+    ) -> (Result_9);
+  ext_marketplaceSettle : (AccountIdentifier__1) -> (Result_3);
+  ext_marketplaceStats : () -> (
+      nat64,
+      nat64,
+      nat64,
+      nat64,
+      nat,
+      nat,
+      nat,
+    ) query;
+  ext_marketplaceTransactions : () -> (vec Transaction) query;
+  ext_metadata : (TokenIdentifier__1) -> (Result_8) query;
+  ext_mint : (vec record { AccountIdentifier__1; Metadata }) -> (
+      vec TokenIndex,
+    );
+  ext_payments : () -> (vec record { AccountIdentifier__1; Payment }) query;
+  ext_removeAdmin : () -> ();
+  ext_saleClose : () -> (bool);
+  ext_saleCurrent : () -> (opt Sale) query;
+  ext_saleEnd : () -> (bool);
+  ext_saleOpen : (
+      vec SalePricingGroup,
+      SaleRemaining,
+      vec AccountIdentifier__1,
+    ) -> (bool);
+  ext_salePause : () -> (bool);
+  ext_salePurchase : (nat, nat64, nat64, AccountIdentifier__1) -> (Result_5);
+  ext_saleResume : () -> (bool);
+  ext_saleSettings : (AccountIdentifier__1) -> (opt SaleDetails) query;
+  ext_saleSettle : (AccountIdentifier__1) -> (Result_4);
+  ext_saleTransactions : () -> (vec SaleTransaction) query;
+  ext_saleUpdate : (
+      opt vec SalePricingGroup,
+      opt SaleRemaining,
+      opt vec AccountIdentifier__1,
+    ) -> (bool);
+  ext_setAdmin : (principal) -> ();
+  ext_setCollectionMetadata : (text, text) -> ();
+  ext_setMarketplaceOpen : (Time) -> ();
+  ext_setOwner : (principal) -> ();
+  ext_setRoyalty : (vec record { AccountIdentifier__1; nat64 }) -> ();
+  ext_setSaleRoyalty : (AccountIdentifier__1) -> () oneway;
+  ext_transfer : (TransferRequest) -> (TransferResponse);
+  extdata_supply : (TokenIdentifier__1) -> (Result_2) query;
+  extensions : () -> (vec Extension) query;
+  failedSales : () -> (
+      vec record { AccountIdentifier__1; SubAccount__1 },
+    ) query;
+  getMetadata : () -> (vec record { TokenIndex; MetadataLegacy }) query;
+  getMinter : () -> (principal) query;
+  getRegistry : () -> (vec record { TokenIndex; AccountIdentifier__1 }) query;
+  getTokens : () -> (vec record { TokenIndex; MetadataLegacy }) query;
+  get_all_transfer_history : () -> (
+      vec record { TokenIndex; vec TransactionEvent },
+    ) query;
+  get_token_transfer_history : (nat32) -> (vec TransactionEvent) query;
+  get_trusted_origins : () -> (vec text);
+  heartbeat_assetCanisters : () -> ();
+  heartbeat_capEvents : () -> ();
+  heartbeat_disbursements : () -> ();
+  heartbeat_external : () -> ();
+  heartbeat_isRunning : () -> (bool) query;
+  heartbeat_paymentSettlements : () -> ();
+  heartbeat_pending : () -> (vec record { text; nat }) query;
+  heartbeat_start : () -> ();
+  heartbeat_stop : () -> ();
+  http_request : (HttpRequest) -> (HttpResponse) query;
+  http_request_streaming_callback : (HttpStreamingCallbackToken) -> (
+      HttpStreamingCallbackResponse,
+    ) query;
+  http_request_update : (HttpRequest) -> (HttpResponse);
+  icrc28_trusted_origins : () -> (record { trusted_origins : vec text });
+  isHeartbeatRunning : () -> (bool) query;
+  list : (ListRequest) -> (Result_3);
+  listings : () -> (vec record { TokenIndex; Listing; MetadataLegacy }) query;
+  lock : (TokenIdentifier__1, nat64, AccountIdentifier__1, SubAccount__1) -> (
+      Result_7,
+    );
+  metadata : (TokenIdentifier__1) -> (Result_6) query;
+  reserve : (nat64, nat64, AccountIdentifier__1, SubAccount__1) -> (Result_5);
+  retreive : (AccountIdentifier__1) -> (Result_4);
+  saleTransactions : () -> (vec SaleTransaction) query;
+  salesSettings : (AccountIdentifier__1) -> (SaleSettings) query;
+  setMinter : (principal) -> ();
+  settle : (TokenIdentifier__1) -> (Result_3);
+  settlements : () -> (
+      vec record { TokenIndex; AccountIdentifier__1; nat64 },
+    ) query;
+  stats : () -> (nat64, nat64, nat64, nat64, nat, nat, nat) query;
+  supply : (TokenIdentifier__1) -> (Result_2) query;
+  tokens : (AccountIdentifier__1) -> (Result_1) query;
+  tokens_ext : (AccountIdentifier__1) -> (Result) query;
+  transactions : () -> (vec Transaction) query;
+  transfer : (TransferRequest) -> (TransferResponse);
+};
+type Extension = text;
+type HeaderField = record { text; text };
+type HttpRequest = record {
+  url : text;
+  method : text;
+  body : blob;
+  headers : vec HeaderField;
+};
+type HttpResponse = record {
+  body : blob;
+  headers : vec HeaderField;
+  upgrade : bool;
+  streaming_strategy : opt HttpStreamingStrategy;
+  status_code : nat16;
+};
+type HttpStreamingCallbackResponse = record {
+  token : opt HttpStreamingCallbackToken;
+  body : blob;
+};
+type HttpStreamingCallbackToken = record {
+  key : text;
+  sha256 : opt blob;
+  index : nat;
+  content_encoding : text;
+};
+type HttpStreamingStrategy = variant {
+  Callback : record {
+    token : HttpStreamingCallbackToken;
+    callback : func (HttpStreamingCallbackToken) -> (
+        HttpStreamingCallbackResponse,
+      ) query;
+  };
+};
+type ListRequest = record {
+  token : TokenIdentifier__1;
+  from_subaccount : opt SubAccount__1;
+  price : opt nat64;
+};
+type Listing = record { locked : opt Time; seller : principal; price : nat64 };
+type Memo = blob;
+type Metadata = variant {
+  fungible : record {
+    decimals : nat8;
+    metadata : opt MetadataContainer;
+    name : text;
+    symbol : text;
+  };
+  nonfungible : record {
+    thumbnail : text;
+    asset : text;
+    metadata : opt MetadataContainer;
+    name : text;
+  };
+};
+type MetadataContainer = variant {
+  "blob" : blob;
+  data : vec MetadataValue;
+  json : text;
+};
+type MetadataLegacy = variant {
+  fungible : record {
+    decimals : nat8;
+    metadata : opt blob;
+    name : text;
+    symbol : text;
+  };
+  nonfungible : record { metadata : opt blob };
+};
+type MetadataValue = record {
+  text;
+  variant { "nat" : nat; "blob" : blob; "nat8" : nat8; "text" : text };
+};
+type Payment = record {
+  expires : Time;
+  subaccount : SubAccount__1;
+  payer : AccountIdentifier__1;
+  amount : nat64;
+  purchase : PaymentType;
+};
+type PaymentType = variant {
+  nft : TokenIndex;
+  nfts : vec TokenIndex;
+  sale : nat64;
+};
+type Result = variant {
+  ok : vec record { TokenIndex; opt Listing; opt blob };
+  err : CommonError;
+};
+type Result_1 = variant { ok : vec TokenIndex; err : CommonError };
+type Result_10 = variant {
+  ok : record { AccountIdentifier__1; opt Listing };
+  err : CommonError;
+};
+type Result_2 = variant { ok : Balance__1; err : CommonError };
+type Result_3 = variant { ok; err : CommonError };
+type Result_4 = variant { ok; err : text };
+type Result_5 = variant {
+  ok : record { AccountIdentifier__1; nat64 };
+  err : text;
+};
+type Result_6 = variant { ok : MetadataLegacy; err : CommonError };
+type Result_7 = variant { ok : AccountIdentifier__1; err : CommonError };
+type Result_8 = variant { ok : Metadata; err : CommonError };
+type Result_9 = variant {
+  ok : record { AccountIdentifier__1; nat64 };
+  err : CommonError;
+};
+type Sale = record {
+  end : Time;
+  groups : vec SalePricingGroup;
+  start : Time;
+  quantity : nat;
+  remaining : SaleRemaining;
+};
+type SaleDetailGroup = record {
+  id : nat;
+  end : Time;
+  name : text;
+  available : bool;
+  pricing : vec record { nat64; nat64 };
+  start : Time;
+};
+type SaleDetails = record {
+  end : Time;
+  groups : vec SaleDetailGroup;
+  start : Time;
+  quantity : nat;
+  remaining : nat;
+};
+type SalePricingGroup = record {
+  end : Time;
+  participants : vec AccountIdentifier__1;
+  name : text;
+  limit : record { nat64; nat64 };
+  pricing : vec record { nat64; nat64 };
+  start : Time;
+};
+type SaleRemaining = variant { retain; burn; send : AccountIdentifier__1 };
+type SaleSettings = record {
+  startTime : Time;
+  whitelist : bool;
+  totalToSell : nat;
+  sold : nat;
+  bulkPricing : vec record { nat64; nat64 };
+  whitelistTime : Time;
+  salePrice : nat64;
+  remaining : nat;
+  price : nat64;
+};
+type SaleTransaction = record {
+  time : Time;
+  seller : principal;
+  tokens : vec TokenIndex;
+  buyer : AccountIdentifier__1;
+  price : nat64;
+};
+type SubAccount = blob;
+type SubAccount__1 = blob;
+type Time = int;
+type TokenIdentifier = text;
+type TokenIdentifier__1 = text;
+type TokenIndex = nat32;
+type Transaction = record {
+  token : TokenIndex;
+  time : Time;
+  seller : AccountIdentifier__1;
+  buyer : AccountIdentifier__1;
+  price : nat64;
+};
+type TransactionEvent = record {
+  to : text;
+  transaction_time : int;
+  transaction_type : text;
+  tokenIdentifier : text;
+  from : principal;
+};
+type TransactionType = variant { Sale; Transfer };
+type TransferRequest = record {
+  to : User;
+  token : TokenIdentifier;
+  notify : bool;
+  from : User;
+  memo : Memo;
+  subaccount : opt SubAccount;
+  amount : Balance;
+  transfer_type : opt TransactionType;
+};
+type TransferResponse = variant {
+  ok : Balance;
+  err : variant {
+    CannotNotify : AccountIdentifier;
+    InsufficientBalance;
+    InvalidToken : TokenIdentifier;
+    Rejected;
+    Unauthorized : AccountIdentifier;
+    Other : text;
+  };
+};
+type User = variant { "principal" : principal; address : AccountIdentifier };
+service : (principal) -> EXTNFT
