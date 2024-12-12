@@ -155,6 +155,7 @@ const {user} = useIdentityKit();
           },
         }
 
+        
 
       )]
     
@@ -165,7 +166,7 @@ const {user} = useIdentityKit();
       //   setModalType("error");
     } finally {
       setUploading(false);
-      // setTitle("");
+     setTitle("");
       // setDescription("");
       // setImage(null);
       // setRawImage(null);
