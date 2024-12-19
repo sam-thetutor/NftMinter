@@ -10,7 +10,7 @@ import { BsCopy } from "react-icons/bs";
 import Withdraw from "./Withdraw";
 
 const Balance = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useIdentityKit();
 
@@ -50,7 +50,7 @@ const Balance = () => {
                 }
               />
             </div>
-            <div className="flex mt-2 flex-row gap-2  items-center">
+            <div className="flex mt-2 flex-row gap-2   items-center">
               <span>{user?.principal && shortenAddress(user?.principal.toString())}</span>
 
               <BsCopy

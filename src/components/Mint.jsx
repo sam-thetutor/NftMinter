@@ -212,7 +212,7 @@ const Mint = () => {
   };
 
   return (
-    <div className="flex flex-col  md:flex-row gap-6 py-6 border px-4 mt-4 rounded-lg justify-center">
+    <div className="flex flex-col  md:flex-row gap-6 py-6 border px-4 mt-4 mx-4 rounded-lg justify-center">
       <div className="flex flex-col gap-2 w-full">
         <div className="flex flex-col mt-8 gap-2">
           <h2>Mint your NFT</h2>
@@ -247,7 +247,7 @@ const Mint = () => {
         </div>
 
         {image && (
-          <div className="flex h-64 w-96">
+          <div className="flex h-48 w-72 md:h-64 md:w-96">
             <img src={image} alt="Preview" className="mt-2" />
           </div>
         )}
