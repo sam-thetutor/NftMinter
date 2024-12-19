@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
+import Balance from "./Balance";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { connect, user, disconnect } = useIdentityKit();
+  console.log("user in navbar", user?.principal);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,6 +21,10 @@ const Navbar = () => {
         <div className=" hidden md:flex text-black font-semibold justify-center items-center gap-1 text-lg   p-1 rounded-md cursor-pointer">
           {user?.principal ? (
             <div className="flex flex-row justify-center border px-4 py-1 rounded-md items-center gap-8">
+             
+             <Balance/>
+             
+             
               <CgProfile
                 size={25}
                 color="white"
@@ -29,7 +35,7 @@ const Navbar = () => {
               <LuLogOut onClick={() => disconnect()} color="white" size={23} />
             </div>
           ) : (
-            <div className="flex text-black font-semibold justify-center text-white items-center gap-1 text-lg border  p-1 rounded-md cursor-pointer">
+            <div className="flex font-semibold justify-center text-white items-center gap-1 text-lg border  p-1 rounded-md cursor-pointer">
             
             <button onClick={() => connect()}>Login</button>
             </div>

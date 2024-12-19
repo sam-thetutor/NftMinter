@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { idlFactory as MinterDL } from "../Utils/v2.did";
 import { createActor } from "../Utils/createActor";
@@ -7,6 +7,8 @@ import { adminIdentity } from "../Utils/admin";
 import Resizer from "react-image-file-resizer";
 import { AccountIdentifier } from "@dfinity/ledger-icp";
 import { useIdentityKit } from "@nfid/identitykit/react";
+import { computeExtTokenIdentifier } from "../Utils/tid";
+import DisplayNfts from "./DisplayNfts";
 
 const agent = new HttpAgent({
   identity: adminIdentity,
@@ -24,11 +26,33 @@ const Mint = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [rawImage, setRawImage] = useState(null);
-  const [uplaoading, setUploading] = useState(false);
-const {user} = useIdentityKit();
+  const [uploading, setUploading] = useState(false);
+  const [mynfts, setMyNfts] = useState([]);
+  const [trigger, setTrigger] = useState("");
+  const { user } = useIdentityKit();
+
   useEffect(() => {
-    console.log(title, description);
-  }, [title, description]);
+    const fetchNfts = async () => {
+      if (!user) return;
+
+      try {
+        let accID = AccountIdentifier.fromPrincipal({
+          principal: user?.principal,
+        }).toHex();
+
+        let nfts = await minterCanister.tokens(accID);
+        console.log("nfts :", Array.from(nfts.ok));
+
+        if (nfts.ok) {
+          setMyNfts(Array.from(nfts.ok));
+        }
+      } catch (error) {
+        console.log("error in  getting user nfts :", error);
+      }
+    };
+
+    fetchNfts();
+  }, [user, trigger]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -41,7 +65,7 @@ const {user} = useIdentityKit();
   const uploadImage = async () => {
     console.log("minter canister", minterCanister);
 
-    // setUploading(true);
+    setUploading(true);
     const IMAGETYPE = rawImage.type;
     const CHUNKSIZE = 1900000;
     const imageName = crypto.randomUUID();
@@ -97,7 +121,7 @@ const {user} = useIdentityKit();
       var first = true;
       while (pl.length > CHUNKSIZE) {
         c++;
-        success &= await social_media_canister.stream_asset(
+        success &= await minterCanister.ext_assetStream(
           ah,
           pl.splice(0, CHUNKSIZE),
           first
@@ -131,85 +155,104 @@ const {user} = useIdentityKit();
   };
 
   const handleMintNFT = async () => {
-    await uploadImage();
+    const uploadSuccess = await uploadImage();
+    if (!uploadSuccess) {
+      console.error("Image upload failed");
+      return;
+    }
 
+    console.log(
+      "token identifier :",
+      computeExtTokenIdentifier(5, "tx3w6-2iaaa-aaaap-qpm7q-cai")
+    );
     const jsonMetadata = {
       name: title,
       desc: description,
     };
 
-    try {
-      const tokenId = await minterCanister.ext_mint([(
+    let accID = AccountIdentifier.fromPrincipal({
+      principal: user?.principal,
+    }).toHex();
 
-        AccountIdentifier.fromPrincipal({
-          principal: user.principal,
-        }).toHex(),
+    console.log("accout identifier :", accID);
+
+    let _data = [
+      [
+        accID,
+
         {
           nonfungible: {
-            name: "",
-            asset: "Text",
-            thumbnail: "Text",
-            metadata: {
-              json: "",
-            },
+            name: "title",
+            asset: "fullasset",
+            thumbnail: "thumbnail",
+
+            metadata: [
+              {
+                json: JSON.stringify(jsonMetadata),
+              },
+            ],
           },
-        }
+        },
+      ],
+    ];
 
-        
-
-      )]
-    
-    );
+    try {
+      const tokenId = await minterCanister.ext_mint(_data);
+      setTrigger(Math.random().toString());
+      console.log("Minted token ID:", tokenId);
     } catch (err) {
-      console.error(err);
-      //   setModalMessage("Failed to mint NFT. Please try again.");
-      //   setModalType("error");
+      console.error("error in minting the nft :", err);
     } finally {
       setUploading(false);
-     setTitle("");
-      // setDescription("");
-      // setImage(null);
-      // setRawImage(null);
+      setTitle("");
+      setDescription("");
+      setImage(null);
+      setRawImage(null);
     }
   };
 
   return (
-    <div className="flex flex-row gap-6 py-6  border px-4 mt-4 rounded-lg justify-center items-center">
-      <div className="flex flex-col gap-2">
-        <input
-          type="text"
-          className="text-black"
-          value={title}
-          placeholder="enter title"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          className="text-black"
-          value={description}
-          placeholder="enter description"
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input id="fileInput" type="file" onChange={handleImageChange} />
+    <div className="flex flex-col  md:flex-row gap-6 py-6 border px-4 mt-4 rounded-lg justify-center">
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col mt-8 gap-2">
+          <h2>Mint your NFT</h2>
+          <input
+            type="text"
+            className="text-black"
+            value={title}
+            placeholder="enter title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            className="text-black"
+            value={description}
+            placeholder="enter description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <input id="fileInput" type="file" onChange={handleImageChange} />
 
-        <div>
-          {uplaoading ? (
-            <ClipLoader color="white" size={20} />
-          ) : (
-            <button
-              onClick={handleMintNFT}
-              className=" border justify- items-center rounded-lg p-1 hover:bg-gray-400"
-            >
-              Upload
-            </button>
-          )}
+          <div>
+            {uploading ? (
+              <ClipLoader color="white" size={20} />
+            ) : (
+              <button
+                onClick={handleMintNFT}
+                className="border justify-items-center rounded-lg py-1 px-3 font-bold hover:bg-gray-400"
+              >
+                Mint
+              </button>
+            )}
+          </div>
         </div>
+
+        {image && (
+          <div className="flex h-64 w-96">
+            <img src={image} alt="Preview" className="mt-2" />
+          </div>
+        )}
       </div>
-      {image && (
-        <div className="flex h-64 w-96">
-          <img src={image} alt="Preview" className="mt-2" />
-        </div>
-      )}
+      <div>{user && mynfts && <DisplayNfts mynfts={mynfts} />}</div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 // Version: 1.0.0
 type AccountIdentifier = Text;
 type AccountIdentifier__1 = AccountIdentifier;
-type AccountIdentifier__3 = AccountIdentifier__1;
+type AccountIdentifier__2 = AccountIdentifier__1;
 type AssetHandle = Text;
 type AssetId = Nat32;
 type AssetType =
@@ -26,7 +26,7 @@ type CapDetailValue =
 type CapIndefiniteEvent =
   {caller : Principal; details : [(Text, CapDetailValue)]; operation : Text};
 type ChunkId = Nat32;
-type Listing = {locked : ?Time__2; price : Nat64; seller : Principal};
+type Listing = {locked : ?Time__1; price : Nat64; seller : Principal};
 type MetadataContainer =
   {#blob : Blob; #data : [MetadataValue]; #json : Text};
 type MetadataValue =
@@ -51,8 +51,8 @@ type Metadata__1 =
 type Payment =
   {
     amount : Nat64;
-    expires : Time__2;
-    payer : AccountIdentifier__3;
+    expires : Time__1;
+    payer : AccountIdentifier__2;
     purchase : PaymentType;
     subaccount : SubAccount__2
   };
@@ -60,52 +60,44 @@ type PaymentType =
   {#nft : TokenIndex__1; #nfts : [TokenIndex__1]; #sale : Nat64};
 type Sale =
   {
-    end : Time__2;
+    end : Time__1;
     groups : [SalePricingGroup];
     quantity : Nat;
     remaining : SaleRemaining;
-    start : Time__2
+    start : Time__1
   };
 type SalePricingGroup =
   {
-    end : Time__2;
+    end : Time__1;
     limit : (Nat64, Nat64);
     name : Text;
-    participants : [AccountIdentifier__3];
+    participants : [AccountIdentifier__2];
     pricing : [(Nat64, Nat64)];
-    start : Time__2
+    start : Time__1
   };
-type SaleRemaining = {#burn; #retain; #send : AccountIdentifier__3};
+type SaleRemaining = {#burn; #retain; #send : AccountIdentifier__2};
 type SaleTransaction =
   {
-    buyer : AccountIdentifier__3;
+    buyer : AccountIdentifier__2;
     price : Nat64;
     seller : Principal;
-    time : Time__2;
+    time : Time__1;
     tokens : [TokenIndex__1]
   };
 type SubAccount = [Nat8];
 type SubAccount__1 = SubAccount;
 type SubAccount__2 = SubAccount__1;
 type Time = Int;
-type Time__2 = Time;
+type Time__1 = Time;
 type TokenIndex = Nat32;
 type TokenIndex__1 = TokenIndex;
 type Transaction =
   {
-    buyer : AccountIdentifier__3;
+    buyer : AccountIdentifier__2;
     price : Nat64;
-    seller : AccountIdentifier__3;
-    time : Time__2;
+    seller : AccountIdentifier__2;
+    time : Time__1;
     token : TokenIndex__1
-  };
-type TransactionEvent =
-  {
-    from : Principal;
-    to : Text;
-    tokenIdentifier : Text;
-    transaction_time : Int;
-    transaction_type : Text
   };
 actor {
   stable var cap_rootBucketId : ?Text;
@@ -116,29 +108,28 @@ actor {
   stable var config_initial_sale_royalty_address : Text;
   stable var config_marketplace_open : Int;
   stable var config_owner : Principal;
-  stable var config_royalty : [(AccountIdentifier__3, Nat64)];
+  stable var config_royalty : [(AccountIdentifier__2, Nat64)];
   stable var data_assetCanistersTableState : [(Principal, Nat)];
   stable var data_assetsTableState : [(AssetHandle, Asset__1)];
   stable var data_capEventsQueueState : [CapIndefiniteEvent];
   stable var data_chunksTableState : [(ChunkId, Blob)];
   stable var data_disbursementQueueState :
-    [(TokenIndex__1, AccountIdentifier__3, SubAccount__2, Nat64)];
-  stable var data_expiredPayments : [(AccountIdentifier__3, SubAccount__2)];
+    [(TokenIndex__1, AccountIdentifier__2, SubAccount__2, Nat64)];
+  stable var data_expiredPayments : [(AccountIdentifier__2, SubAccount__2)];
   stable var data_internalNextChunkId : Nat32;
   stable var data_internalNextSubAccount : Nat;
   stable var data_internalNextTokenId : Nat32;
   stable var data_internalRunHeartbeat : Bool;
-  stable var data_mintersTableState : [(AccountIdentifier__3, ())];
   stable var data_ownersTableState :
-    [(AccountIdentifier__3, [TokenIndex__1])];
+    [(AccountIdentifier__2, [TokenIndex__1])];
   stable var data_paymentSettlementsTableState :
-    [(AccountIdentifier__3, Payment)];
+    [(AccountIdentifier__2, Payment)];
   stable var data_registryTableState :
-    [(TokenIndex__1, AccountIdentifier__3)];
+    [(TokenIndex__1, AccountIdentifier__2)];
   stable var data_saleCurrent : ?Sale;
-  stable var data_saleGroupsTableState : [(AccountIdentifier__3, Nat)];
+  stable var data_saleGroupsTableState : [(AccountIdentifier__2, Nat)];
   stable var data_saleSoldQuantity : Nat;
-  stable var data_saleSoldTracker : [(Nat, AccountIdentifier__3, Nat64)];
+  stable var data_saleSoldTracker : [(Nat, AccountIdentifier__2, Nat64)];
   stable var data_saleTokensForSale : [TokenIndex__1];
   stable var data_saleTransactions : [SaleTransaction];
   stable var data_soldIcp : Nat64;
@@ -146,6 +137,5 @@ actor {
   stable var data_supply : Nat;
   stable var data_tokenListingTableState : [(TokenIndex__1, Listing)];
   stable var data_tokenMetadataTableState : [(TokenIndex__1, Metadata__1)];
-  stable var data_transactions : [Transaction];
-  stable var transactionEventHistory : [(TokenIndex__1, [TransactionEvent])]
+  stable var data_transactions : [Transaction]
 };

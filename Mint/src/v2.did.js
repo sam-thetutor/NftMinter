@@ -1,4 +1,4 @@
-export const idlFactory = ({ IDL }) => {
+export default ({ IDL }) => {
   const AssetHandle = IDL.Text;
   const TokenIndex = IDL.Nat32;
   const SubAccount__1 = IDL.Vec(IDL.Nat8);
@@ -217,7 +217,6 @@ export const idlFactory = ({ IDL }) => {
   const HttpResponse = IDL.Record({
     'body' : IDL.Vec(IDL.Nat8),
     'headers' : IDL.Vec(HeaderField),
-    'upgrade' : IDL.Bool,
     'streaming_strategy' : IDL.Opt(HttpStreamingStrategy),
     'status_code' : IDL.Nat16,
   });
@@ -333,7 +332,6 @@ export const idlFactory = ({ IDL }) => {
     'ext_removeAdmin' : IDL.Func([], [], []),
     'ext_saleClose' : IDL.Func([], [IDL.Bool], []),
     'ext_saleCurrent' : IDL.Func([], [IDL.Opt(Sale)], ['query']),
-    'ext_saleEnd' : IDL.Func([], [IDL.Bool], []),
     'ext_saleOpen' : IDL.Func(
         [
           IDL.Vec(SalePricingGroup),
@@ -343,13 +341,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Bool],
         [],
       ),
-    'ext_salePause' : IDL.Func([], [IDL.Bool], []),
     'ext_salePurchase' : IDL.Func(
         [IDL.Nat, IDL.Nat64, IDL.Nat64, AccountIdentifier__1],
         [Result_5],
         [],
       ),
-    'ext_saleResume' : IDL.Func([], [IDL.Bool], []),
     'ext_saleSettings' : IDL.Func(
         [AccountIdentifier__1],
         [IDL.Opt(SaleDetails)],
@@ -374,12 +370,7 @@ export const idlFactory = ({ IDL }) => {
     'ext_setCollectionMetadata' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'ext_setMarketplaceOpen' : IDL.Func([Time], [], []),
     'ext_setOwner' : IDL.Func([IDL.Principal], [], []),
-    'ext_setRoyalty' : IDL.Func(
-        [IDL.Vec(IDL.Tuple(AccountIdentifier__1, IDL.Nat64))],
-        [],
-        [],
-      ),
-    'ext_setSaleRoyalty' : IDL.Func([AccountIdentifier__1], [], ['oneway']),
+    'ext_setRoyalty' : IDL.Func([AccountIdentifier__1, IDL.Nat64], [], []),
     'ext_transfer' : IDL.Func([TransferRequest], [TransferResponse], []),
     'extdata_supply' : IDL.Func([TokenIdentifier__1], [Result_2], ['query']),
     'extensions' : IDL.Func([], [IDL.Vec(Extension)], ['query']),
@@ -423,7 +414,6 @@ export const idlFactory = ({ IDL }) => {
         [HttpStreamingCallbackResponse],
         ['query'],
       ),
-    'http_request_update' : IDL.Func([HttpRequest], [HttpResponse], []),
     'isHeartbeatRunning' : IDL.Func([], [IDL.Bool], ['query']),
     'list' : IDL.Func([ListRequest], [Result_3], []),
     'listings' : IDL.Func(
@@ -464,9 +454,10 @@ export const idlFactory = ({ IDL }) => {
     'supply' : IDL.Func([TokenIdentifier__1], [Result_2], ['query']),
     'tokens' : IDL.Func([AccountIdentifier__1], [Result_1], ['query']),
     'tokens_ext' : IDL.Func([AccountIdentifier__1], [Result], ['query']),
+    'test123' : IDL.Func([], [IDL.Text], ['query']),
     'transactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
     'transfer' : IDL.Func([TransferRequest], [TransferResponse], []),
   });
   return EXTNFT;
 };
-export const init = ({ IDL }) => { return [IDL.Principal]; };
+export const init = ({ IDL }) => { return []; };

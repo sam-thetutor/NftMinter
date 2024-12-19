@@ -126,12 +126,6 @@ export interface EXTNFT {
   'getMinter' : ActorMethod<[], Principal>,
   'getRegistry' : ActorMethod<[], Array<[TokenIndex, AccountIdentifier__1]>>,
   'getTokens' : ActorMethod<[], Array<[TokenIndex, MetadataLegacy]>>,
-  'get_all_transfer_history' : ActorMethod<
-    [],
-    Array<[TokenIndex, Array<TransactionEvent>]>
-  >,
-  'get_token_transfer_history' : ActorMethod<[number], Array<TransactionEvent>>,
-  'get_trusted_origins' : ActorMethod<[], Array<string>>,
   'heartbeat_assetCanisters' : ActorMethod<[], undefined>,
   'heartbeat_capEvents' : ActorMethod<[], undefined>,
   'heartbeat_disbursements' : ActorMethod<[], undefined>,
@@ -147,10 +141,6 @@ export interface EXTNFT {
     HttpStreamingCallbackResponse
   >,
   'http_request_update' : ActorMethod<[HttpRequest], HttpResponse>,
-  'icrc28_trusted_origins' : ActorMethod<
-    [],
-    { 'trusted_origins' : Array<string> }
-  >,
   'isHeartbeatRunning' : ActorMethod<[], boolean>,
   'list' : ActorMethod<[ListRequest], Result_3>,
   'listings' : ActorMethod<[], Array<[TokenIndex, Listing, MetadataLegacy]>>,
@@ -357,15 +347,6 @@ export interface Transaction {
   'buyer' : AccountIdentifier__1,
   'price' : bigint,
 }
-export interface TransactionEvent {
-  'to' : string,
-  'transaction_time' : bigint,
-  'transaction_type' : string,
-  'tokenIdentifier' : string,
-  'from' : Principal,
-}
-export type TransactionType = { 'Sale' : null } |
-  { 'Transfer' : null };
 export interface TransferRequest {
   'to' : User,
   'token' : TokenIdentifier,
@@ -374,7 +355,6 @@ export interface TransferRequest {
   'memo' : Memo,
   'subaccount' : [] | [SubAccount],
   'amount' : Balance,
-  'transfer_type' : [] | [TransactionType],
 }
 export type TransferResponse = { 'ok' : Balance } |
   {

@@ -1,7 +1,11 @@
 {
     "canisters": {
       "minter": {
-      "main": "backend/v2.mo",
+      "main": "Mint/src/ext_v2/v2.mo",
+      "type": "motoko"
+    },
+    "owner": {
+      "main": "minter/v2.mo",
       "type": "motoko"
     },
       "frontend": {

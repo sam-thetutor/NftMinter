@@ -109,11 +109,6 @@ type EXTNFT = service {
   getMinter : () -> (principal) query;
   getRegistry : () -> (vec record { TokenIndex; AccountIdentifier__1 }) query;
   getTokens : () -> (vec record { TokenIndex; MetadataLegacy }) query;
-  get_all_transfer_history : () -> (
-      vec record { TokenIndex; vec TransactionEvent },
-    ) query;
-  get_token_transfer_history : (nat32) -> (vec TransactionEvent) query;
-  get_trusted_origins : () -> (vec text);
   heartbeat_assetCanisters : () -> ();
   heartbeat_capEvents : () -> ();
   heartbeat_disbursements : () -> ();
@@ -128,7 +123,6 @@ type EXTNFT = service {
       HttpStreamingCallbackResponse,
     ) query;
   http_request_update : (HttpRequest) -> (HttpResponse);
-  icrc28_trusted_origins : () -> (record { trusted_origins : vec text });
   isHeartbeatRunning : () -> (bool) query;
   list : (ListRequest) -> (Result_3);
   listings : () -> (vec record { TokenIndex; Listing; MetadataLegacy }) query;
@@ -321,14 +315,6 @@ type Transaction = record {
   buyer : AccountIdentifier__1;
   price : nat64;
 };
-type TransactionEvent = record {
-  to : text;
-  transaction_time : int;
-  transaction_type : text;
-  tokenIdentifier : text;
-  from : principal;
-};
-type TransactionType = variant { Sale; Transfer };
 type TransferRequest = record {
   to : User;
   token : TokenIdentifier;
@@ -337,7 +323,6 @@ type TransferRequest = record {
   memo : Memo;
   subaccount : opt SubAccount;
   amount : Balance;
-  transfer_type : opt TransactionType;
 };
 type TransferResponse = variant {
   ok : Balance;
