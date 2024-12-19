@@ -21,13 +21,6 @@ const Navbar = () => {
           {user?.principal ? (
             <div className="flex flex-row justify-center border px-4 py-1 rounded-md items-center gap-8">
               <Balance />
-              {/* <CgProfile
-                size={25}
-                color="white"
-                // onClick={() => {
-                //   navigate("/profile");
-                // }}
-              /> */}
               <LuLogOut onClick={() => disconnect()} color="white" size={23} />
             </div>
           ) : (
@@ -43,13 +36,13 @@ const Navbar = () => {
         </div>
       </div>
       {isOpen && (
-        user.principal ? (
+        user?.principal ? (
           <div className="flex flex-row mt-6 justify-center border px-4 py-1 rounded-md items-center gap-8">
             <Balance />
             <LuLogOut onClick={() => disconnect()} color="white" size={23} />
           </div>
         ) : (
-          <div className="flex font-semibold justify-center text-white items-center gap-1 text-lg border  p-1 rounded-md cursor-pointer">
+          <div className="flex mt-6 font-semibold justify-center text-white items-center gap-1 text-lg border  p-1 rounded-md cursor-pointer">
             <button onClick={() => connect()}>Login</button>
           </div>
         )
